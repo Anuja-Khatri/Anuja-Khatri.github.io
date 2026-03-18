@@ -31,7 +31,7 @@
       color: var(--text);
       font-family: 'Jost', sans-serif;
       font-weight: 300;
-      font-size: 16px;
+      font-size: 17px;
       line-height: 1.75;
       min-height: 100vh;
       overflow-x: hidden;
@@ -51,9 +51,31 @@
     .page {
       position: relative;
       z-index: 1;
-      max-width: 660px;
-      margin: 0 auto;
-      padding: 90px 2.5rem 140px;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      grid-template-rows: auto;
+      min-height: 100vh;
+    }
+
+    /* ── LEFT PANEL ────────────────────────────────────── */
+    .left-panel {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 72px 48px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--border);
+    }
+
+    .left-top {}
+    .left-bottom {}
+
+    /* ── RIGHT PANEL ───────────────────────────────────── */
+    .right-panel {
+      padding: 72px 72px 120px;
+      min-height: 100vh;
     }
 
     /* ── HEADER ────────────────────────────────────────── */
@@ -222,7 +244,7 @@
     /* ── PROSE ─────────────────────────────────────────── */
     .prose p {
       font-family: 'Jost', sans-serif;
-      font-size: 15px;
+      font-size: 16px;
       color: rgba(232,223,200,0.75);
       line-height: 1.9;
       margin-bottom: 1.3rem;
@@ -259,7 +281,7 @@
     /* ── SECTION LABEL ─────────────────────────────────── */
     .section-label {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9.5px;
+      font-size: 11px;
       font-weight: 300;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -350,7 +372,7 @@
     }
 
     .project-card-desc {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--muted);
       line-height: 1.7;
     }
@@ -364,7 +386,7 @@
 
     .stack-tag {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9.5px;
+      font-size: 11px;
       font-weight: 300;
       padding: 0.2rem 0.6rem;
       border: 1px solid var(--border);
@@ -432,7 +454,7 @@
     }
 
     .research-abstract {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--muted);
       line-height: 1.7;
       margin-bottom: 0.85rem;
@@ -582,13 +604,11 @@
       padding-top: 32px;
       border-top: 1px solid var(--border);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 1rem;
     }
 
-    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
 
     .footer-links a {
       font-family: 'IBM Plex Mono', monospace;
@@ -612,14 +632,94 @@
     }
 
     /* ── ANIMATIONS ────────────────────────────────────── */
+    /* ── CURSOR BLINK ──────────────────────────────────── */
+    .site-name::after {
+      content: '_';
+      color: var(--accent);
+      animation: blink 1.2s step-end infinite;
+      font-weight: 300;
+      margin-left: 2px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ── SECTION TITLE UNDERLINE ───────────────────────── */
+    .s-title {
+      position: relative;
+    }
+
+    .s-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .s-trigger:hover .s-title::after,
+    .s-item.open .s-title::after {
+      width: 100%;
+    }
+
+    /* ── STAGGERED SECTION REVEAL ──────────────────────── */
+    .s-item {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .s-item:nth-child(1) { animation-delay: 0.5s; }
+    .s-item:nth-child(2) { animation-delay: 0.65s; }
+    .s-item:nth-child(3) { animation-delay: 0.8s; }
+    .s-item:nth-child(4) { animation-delay: 0.95s; }
+    .s-item:nth-child(5) { animation-delay: 1.1s; }
+
+    /* ── CARD HOVER LIFT ───────────────────────────────── */
+    .project-card {
+      transition: all 0.25s ease;
+    }
+
+    .project-card:hover {
+      transform: translateX(4px);
+    }
+
+    .research-item {
+      transition: all 0.25s ease;
+    }
+
+    .research-item:hover {
+      transform: translateX(4px);
+    }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     /* ── RESPONSIVE ────────────────────────────────────── */
+      .page {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+      }
+      .left-panel {
+        position: static;
+        height: auto;
+        padding: 48px 28px 36px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .right-panel {
+        padding: 48px 28px 80px;
+      }
+    }
     @media (max-width: 520px) {
-      .page { padding: 60px 1.5rem 100px; }
+      .left-panel { padding: 36px 20px 28px; }
+      .right-panel { padding: 36px 20px 60px; }
       .site-name { font-size: 2.4rem; }
       .s-panel-inner { padding: 0 0 36px 1.5rem; }
       .video-grid { grid-template-columns: 1fr; }
@@ -630,23 +730,42 @@
 <body>
 <div class="page">
 
-  <header class="site-header">
-    <h1 class="site-name">Anuja Khatri</h1>
-    <div class="site-role">
-      <span class="role-item">Strategist</span>
-      <span class="role-div"></span>
-      <span class="role-item">Early-stage operator</span>
-      <span class="role-div"></span>
-      <span class="role-item">Figures it out</span>
+  <!-- LEFT PANEL -->
+  <aside class="left-panel">
+    <div class="left-top">
+      <header class="site-header">
+        <h1 class="site-name">Anuja Khatri</h1>
+        <div class="site-role">
+          <span class="role-item">Strategist</span>
+          <span class="role-div"></span>
+          <span class="role-item">Early-stage operator</span>
+          <span class="role-div"></span>
+          <span class="role-item">Figures it out</span>
+        </div>
+      </header>
+
+      <div class="intro">
+        <p>I grew up asking why things work the way they do.</p>
+        <p>Physics gave me the language.</p>
+        <p>The rest, I figured out as I went.</p>
+      </div>
     </div>
-  </header>
 
-  <div class="intro">
-    <p>I grew up asking why things work the way they do.</p>
-    <p>Physics gave me the language.</p>
-    <p>The rest, I figured out as I went.</p>
-  </div>
+    <div class="left-bottom">
+      <footer class="site-footer">
+        <div class="footer-links">
+          <a href="mailto:anujakhatri3009@gmail.com">Email</a>
+          <a href="https://github.com/Anuja-Khatri" target="_blank">GitHub</a>
+          <a href="https://www.linkedin.com/in/anujakhatri/" target="_blank">LinkedIn</a>
+          <a href="https://x.com/AnujaKhatri3" target="_blank">X</a>
+        </div>
+        <p class="footer-copy">© 2025 Anuja Khatri</p>
+      </footer>
+    </div>
+  </aside>
 
+  <!-- RIGHT PANEL -->
+  <main class="right-panel">
   <div class="sections">
 
     <!-- 01 EXPERIENCE -->
@@ -756,12 +875,6 @@
       </button>
       <div class="s-panel">
         <div class="s-panel-inner">
-          <a href="https://github.com/Anuja-Khatri" target="_blank" class="github-link">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-            </svg>
-            View ThoughtLog on GitHub
-          </a>
 
           <div class="project-list">
             <a href="#" class="project-card">
@@ -1005,23 +1118,15 @@
             <a href="https://www.covalenthq.com/blog/arbitrum-and-optimism/" target="_blank" class="press-link">Covalent</a>
             <a href="https://www.theblock.co/post/238584/cega-defi-arbitrum" target="_blank" class="press-link">The Block</a>
             <a href="https://www.prnewswire.com/news-releases/kinto-launches-as-a-layer-2-in-arbitrum-ecosystem-301993897.html" target="_blank" class="press-link">PR Newswire</a>
+          </div>
         </div>
       </div>
     </div>
 
-  </div>
+  </div><!-- end .sections -->
+  </main><!-- end .right-panel -->
 
-  <footer class="site-footer">
-    <div class="footer-links">
-      <a href="mailto:anujakhatri3009@gmail.com">Email</a>
-      <a href="https://github.com/Anuja-Khatri" target="_blank">GitHub</a>
-      <a href="https://www.linkedin.com/in/anujakhatri/" target="_blank">LinkedIn</a>
-      <a href="https://x.com/AnujaKhatri3" target="_blank">X</a>
-    </div>
-    <p class="footer-copy">© 2025 Anuja Khatri</p>
-  </footer>
-
-</div>
+</div><!-- end .page -->
 <script>
   function toggle(id) {
     const item = document.getElementById(id);
